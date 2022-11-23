@@ -406,7 +406,10 @@
 -- ('White Noise','Don','DeLillo',1985,49,320),
 -- ('Connery Row','John','Steinbeck',1945,95,181),
 -- ('Oblivion:Stories','David','Foster Wallace',2004,172,329),
--- ('Consider The Lobster','David','Foster Wallace',2005,92,343);
+-- ('Consider The Lobster','David','Foster Wallace',2005,92,343),
+-- ('10% Happier','Dan','Harris',2014,29,256),
+-- ('Fake_Book','Freida','Harris',2001,287,428),
+-- ('Lincoln In The Bardo','George','Saunders',2017,1000,367);
 
 -- Concat Menggabungkan DATA Agar Output Lebih Rapi
 
@@ -451,4 +454,304 @@
 -- REVERSE
 
 -- CHAR_LENGTH
--- UPPER(),LOWER()
+-- UPPER(),LOWER() SELECT UPPER()
+
+-- STRING FUNCTION EXERCISE
+
+-- Balik Dan uppercase kata ini = 'Kenapa Kucingku Menatapku Dengan Tatapan Benci?'
+
+-- SELECT REVERSE(UPPER('Kenapa Kucingku Menatapku Dengan Tatapan Benci?'));
+
+-- Aku-Suka-Kucing
+
+-- Merubah Spasi Dengan Tanda -> Di Judul Buku
+
+-- SELECT judul FROM buku_buku;
+-- SELECT REPLACE(judul,' ','->') AS Judul FROM buku_buku;
+
+-- Membalik Nama depan pengarang
+
+-- SELECT nama_depan_pengarang FROM buku_buku;
+
+-- SELECT 
+--   CONCAT (nama_depan_pengarang) AS "nama depan",
+--   REVERSE (nama_depan_pengarang) AS "nama depan terbalik";
+
+-- Menggabungkan nama pengarang kemudian menjadikan upper
+
+-- SELECT nama_depan_pengarang,nama_belakang_pengarang FROM buku_buku;
+
+-- SELECT 
+-- 	CONCAT(UPPER(nama_depan_pengarang),' ',UPPER(nama_belakang_pengarang)) AS "nama lengkap dengan huruf besar" FROM buku_buku;
+
+
+-- buat blurb
+
+-- Contoh : Judul Buku diterbitkan sejak tahun ....
+
+-- SELECT judul,tahun_rilis FROM buku_buku;
+
+-- SELECT CONCAT(judul,' Diterbitkan Sejak Tahun ',tahun_rilis) AS blurb FROM buku_buku;
+
+-- Tampilkan Judul Buku Dan Panjang Karakter Judul Tersebut
+
+-- SELECT judul FROM buku_buku;
+
+-- SELECT 
+-- 	judul AS Judul,
+--     CHAR_LENGTH(judul) AS "Jumlah Huruf"
+--     FROM buku_buku;
+
+-- Menampilkan Judul Buku Lebih Pendek,nama Pengarang(belakang,depan),dan stok
+
+-- Jadi : Judul Pendek,pengarang,stok ada angka
+
+-- SELECT judul,nama_depan_pengarang,nama_belakang_pengarang,jumlah_stock FROM buku_buku;
+
+-- SELECT 
+-- 	CONCAT(SUBSTRING(judul,1,10),'...') AS "Judul Pendek",
+--     CONCAT(nama_belakang_pengarang,',',nama_depan_pengarang) AS "Nama Pengarang",
+--     CONCAT(jumlah_stock,' Jumlah Stok Bukunya') AS "Stok Buku"
+-- FROM buku_buku;
+
+-- SELECT Lebih Spesifik
+
+-- DISTINCT 
+
+-- SELECT DISTINCT nama_belakang_pengarang FROM buku_buku;
+
+-- Menampilkan Data Yang Spesifik Misalkan Menampilkan Nama Pengarang Yang Lebih Dari 1 Karena Menerbitkan Lebih Dari 1 Buku Bisa Di Anulir.
+
+
+-- ORDER BY - Mensortir Hasil Kita
+
+-- SELECT column_name FROM table_name ORDER BY column_name/angka column_name yang terpilih misalkan column_name sebelumnya ada 3 bisa milih antara 1,2,3/column_name di ORDER BY bisa lebih dari 1 dalam kondisi tertentu;
+-- Ascending Defaultnya.Kalau Mau Descending + DESC di belakangnya
+
+-- LIMIT - Batas Berapa Banyak Data Yang Ingin Diambil
+
+-- LIMIT angka;
+
+-- SELECT column_name FROM table_name ORDER BY column_name LIMIT angka awal optional dimulai di 0,berapa banyak yang dimau;
+
+-- ORDER BY Baru Limit = Contoh Mengambil Data Buku Keluaran Terlama 3 JudulBuku Saja
+
+-- LIKE - Mengambil Data Yang Tidak Sespesifik WHERE
+
+-- SELECT column_name FROM table_name WHERE nama_depan_pengarang LIKE '%da%'; -%% itu wildcards dan wajib kalau belakang nya aja yang persen berarti harus mirip banget bukan yang mengandung kalimat aja.Tanpa %% maka akan menjadi yang bener2 da aja.
+
+-- LIKE '____' 4 underscore berapa banyak underscore menentukan banyak karakter
+-- jika ingin mencari yang mengandung persen atau _ maka sebelumnya menggunakan \
+-- LIKE tidak case insensitive
+-- TEST
+
+-- menampilkan judul buku yang hanya ada kata stories nya
+
+-- SELECT judul FROM buku_buku WHERE judul LIKE '%stories%';
+
+-- temukan buku yang paling panjang
+
+-- -- SELECT judul,jumlah_halaman FROM buku_buku ORDER BY jumlah_halaman DESC LIMIT 1;
+
+-- -- SELECT CONCAT(judul,' - ',tahun_rilis) AS rangkuman FROM buku_buku ORDER BY tahun_rilis DESC LIMIT 3;
+
+-- temukan semua buku yang nama akhir pengarangnya punya tanda spasi
+
+-- SELECT judul,nama_belakang_pengarang FROM buku_buku WHERE nama_belakang_pengarang LIKE '% %';
+
+-- Temukan 3 buku yang paling sedikit stoknya dengan nama pengarang secara alfabet
+
+-- SELECT judul,tahun_rilis,jumlah_stock FROM buku_buku ORDER BY jumlah_stock,nama_depan_pengarang LIMIT 3;
+
+-- Menampilkan Semua Buku Dengan di sortir nama belakang pengarang secara berurutan baru judul bukunya
+
+-- SELECT judul,nama_belakang_pengarang FROM buku_buku ORDER BY nama_belakang_pengarang,judul;
+
+-- Meneriakkan Semua Nama Pengarang Secara alfabet
+
+-- SELECT CONCAT('PENGARANG FAVORITKU ADALAH ',UPPER(nama_belakang_pengarang),' ',UPPER(nama_depan_pengarang),'!') AS Teriak FROM buku_buku ORDER BY nama_belakang_pengarang;
+
+
+-- Aggregate Functions
+
+-- COUNT - Menghitung Jumlah Sesuatu Data
+
+-- SELECT COUNT(*) FROM table_name; - Berapa Banyak Buku Dalam table Itu;
+
+-- SELECT COUNT(DISTINCT nama_depan_pengarang,column_name optional) FROM buku_buku; - Berapa Banyak nama Depan Pengarang Dalam Tabel Secara Spesifik
+
+-- Bisa Menggabungkan COUNT di dalamnya 2 column_name;
+
+-- Menghitung Semua Judul Buku Yang Mengandukung Kata The
+
+-- SELECT COUNT(judul) FROM buku_buku WHERE judul LIKE '%the%';
+
+-- GROUP BY - Mengelompokkan Data Yang Berkaitan Menjadi Satu Baris 
+
+-- Contoh Mengambil Data Buku Berdasarkan nama pengarang di kelompokkan dan di lihat mana yang paling laku
+
+-- SELECT judul,nama_belakang_pengarang,COUNT(*) FROM buku_buku GROUP BY nama_belakang_pengarang,column_name 2 optional;
+
+-- MIN AND MAX - SELECT MIN/MAX(column_name) FROM table_name;
+
+-- + GROUP BY
+
+-- SELECT nama_depan_pengarang,nama_belakang_pengarang,MIN(tahun_rilis) FROM buku_buku GROUP BY nama_belakang_pengarang,nama_depan_pengarang;  //2 column_name GROUP BY Karena Ada Yang sama Contohnya Harris
+
+-- Cara Menampilkan Data Tahun Berapa Buku Pertama Pengarang Rilis
+
+-- SUM - Menjumlahkan Semua Data
+
+-- SELECT SUM(column_name (number type)) FROM table_name;
+
+-- + GROUP BY 
+
+-- SELECT nama_depan_pengarang,nama_belakang_pengarang, SUM(jumlah_halaman) FROM buku_buku GROUP BY nama_belakang_pengarang,nama_depan_pengarang; 
+
+-- Mengetahui Jumlah Halaman Buku Yang Ditulis Tiap Pengarang;
+
+-- AVG - AVERAGE - RATA-RATA 
+
+-- SELECT AVG(column_name(num type)) FROM table_name;
+
+-- SELECT nama_depan_pengarang,nama_belakang_pengarang, AVG(jumlah_halaman) FROM buku_buku GROUP BY nama_belakang_pengarang,nama_depan_pengarang; 
+
+-- TEST
+
+-- Menampilkan Jumlah Buku Dalam Database
+
+-- SELECT COUNT(judul) FROM buku_buku;
+
+-- Menampilkan Jumlah Buku Yang Terbit Di Tahunnya
+
+-- SELECT tahun_rilis,COUNT(*) FROM buku_buku GROUP BY tahun_rilis;
+
+-- Menampilkan Jumlah Buku Yang Ada Di Stok
+
+-- SELECT SUM(jumlah_stock) AS "Stok Toko" FROM buku_buku;
+
+-- Menampilkan Rata-Rata Tahun Rilis Tiap Pengarang
+
+-- SELECT CONCAT(nama_belakang_pengarang,'-',nama_depan_pengarang) AS Pengarang,AVG(tahun_rilis) FROM buku_buku GROUP BY nama_belakang_pengarang,nama_belakang_pengarang;
+
+-- Menemukan Nama Lengkap Pengarang Yang Membuat Buku Terpanjang
+
+-- SELECT CONCAT(nama_depan_pengarang,'-',nama_belakang_pengarang) AS Pengarang,judul,jumlah_halaman FROM buku_buku ORDER BY jumlah_halaman DESC LIMIT 1;
+
+-- Menampilkan Tahun Jumlah Buku yang rilis Dan Rata-rata Halamannya
+
+-- SELECT tahun_rilis AS tahun,COUNT(*) AS 'Jumlah Buku',AVG(jumlah_halaman) AS 'Rata-Rata Halaman' FROM buku_buku GROUP BY tahun_rilis;
+
+-- DATA TYPE PART 2
+
+-- CHAR - VERSI KAKU DARI VARCHAR CHAR(4) 4 BYTES TIDAK PEDULI ISI DATANYA KALAU VARHCAR(4) Bisa 1-5 bytes tergantung isinya.Biasanya digunakan Jika Kita Tahu Isinya Pasti Beberapa Karakter SAJA.Seperti Ya/Tidak Menjadi Y/N.Maksimal 255
+
+-- NUMBERS - INT - Angka Penuh - DECIMAL - Angka Pecahan 
+
+-- DECIMAL (5,2) 5 - Total Digit Angka Yang Bisa Masuk, 2 Total Decimal Belakang Angka Penuh.Misalkan 123.23; 5 max 65 2 max 30
+
+-- Kalau Value yang masuk lebih besar maka akan di tampilkan data terbesarnya.dan di bulatin
+-- jika decimal melebihi jumlahnya
+
+-- FLOAT - DOUBLE - Menyimpan Data Lebih Besar Dengan Ruang Kecil - F 4byte D 8 byte 7&15 digit precision - Jika Melebihi 7 & 15 digit data nya berubah
+
+-- DATES & TIMES 
+
+-- DATE - Tanggal Tanpa Jam YYYY-MM-DD Format 
+
+-- TIME - Jam Tanpa Tanggal HH:MM:SS Format
+
+-- DATETIME - Jam + Tanggal YYYY-MM-DD HH:MM:SS memasukkan data harus dengan '' jadi anggap seperti string
+
+-- -- CURDATE()
+-- -- CURTIME()
+-- -- NOW()
+
+-- FORMATTING DATES
+
+-- DAY() - ANGKA  SELECT DAY(column_name)FROM buku_buku
+-- DAYNAME() -> HARINYA,DAYOFWEEK() -> ANGKA, DAYOFYEAR() -> ANGKA kalau bukan tipe date/datetime maka NULL
+
+-- MONTH(),MONTHNAME(),
+
+-- HOUR(),MINUTE
+
+-- DATE_FORMAT(date/data,'format');
+-- %W,%M,%Y = Hari,Bulan,Tahun Str,Str,num
+
+-- Ada Juga TIME_FORMAT(time,'format');
+
+-- DATE MATH
+
+-- DATEDIFF(date/data,date2/data2);
+
+-- date + expression unit
+-- date - expression unit
+
+-- DATE_ADD(data/date,INTERVAL expression unit)
+-- DATE_SUB(data/date,INTERVAL expression unit)
+
+-- TIMESTAMPS min 1970 max 2038 4 bytes 8 date time bytes
+
+-- CREATE TABLE table_name (
+--   content VARCHAR(100) NOT NULL,
+--   created_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW()
+-- );
+
+-- Ketika kita update data maka timestamp yang sebelumnya akan berubah mengikuti now terbaru
+
+-- membuat table dengan harga lebih kecil dari 1 juta
+
+-- CREATE TABLE barang(
+--   nama_barang CHAR(20),
+--   harga DECIMAL(5,0),
+--   jumlah_stok INT,
+-- )
+
+-- Menampilkan Hari Ini Dengan Format mm/dd/yyyy
+
+-- SELECT judul,DATE_FORMAT(NOW(),'%m/%d/%Y') FROM buku_buku;
+
+-- Menampilkan 2 Januari Pukul 3:15
+
+-- SELECT judul,DATE_FORMAT(NOW(),'%d %M Pukul %H:minute ada di dokumentasi') FROM buku_buku;
+
+-- buat table tweet yang menyimpan username,isi cuitan,kapan dibuat
+
+-- CREATE TABLE tweet (
+--   username CHAR(20),
+--   isi_cuitan CHAR(140),
+--   created_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW();
+-- );
+
+-- LOGICAL OPERATOR AND OR NOT XOR 
+
+!= - NOT EQUAL 
+NOT LIKE - Kebalikan LIKE 
+> - Greater Than SELECT judul FROM buku_buku WHERE tahun_rilis > 2000;
+Mengambil Buku Yang rilis diatas tahun 2000
+>= - Greater Then Or Equal
+
+Jika Hanya SELECT 99 > 1; Hasilnya Akan 1 Atau True;
+
+< - Less Than
+
+<= 
+
+CASE SENSITIVE NOT MATTER WHEN COMPARE CHAR
+
+&& - LOGICAL AND 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
