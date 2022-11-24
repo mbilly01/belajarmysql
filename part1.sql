@@ -726,21 +726,265 @@
 
 -- LOGICAL OPERATOR AND OR NOT XOR 
 
-!= - NOT EQUAL 
-NOT LIKE - Kebalikan LIKE 
-> - Greater Than SELECT judul FROM buku_buku WHERE tahun_rilis > 2000;
-Mengambil Buku Yang rilis diatas tahun 2000
->= - Greater Then Or Equal
+-- != - NOT EQUAL 
+-- NOT LIKE - Kebalikan LIKE 
+-- > - Greater Than SELECT judul FROM buku_buku WHERE tahun_rilis > 2000;
+-- Mengambil Buku Yang rilis diatas tahun 2000
+-- >= - Greater Then Or Equal
 
-Jika Hanya SELECT 99 > 1; Hasilnya Akan 1 Atau True;
+-- Jika Hanya SELECT 99 > 1; Hasilnya Akan 1 Atau True;
 
-< - Less Than
+-- < - Less Than
 
-<= 
+-- <= 
 
-CASE SENSITIVE NOT MATTER WHEN COMPARE CHAR
+-- CASE SENSITIVE NOT MATTER WHEN COMPARE CHAR
 
-&& - LOGICAL AND 
+-- && - LOGICAL AND / Bisa Pakai && Atau AND
+
+-- Menampilkan Data Buku Karangan Egger Yang Terbit Tahun 2010 Ke atas
+
+-- SELECT * FROM buku_buku WHERE nama_belakang_pengarang = 'Eggers' && tahun_rilis > 2010;
+
+-- || LOGICAL OR
+
+-- BETWEEN 
+
+-- SELECT judul FROM buku_buku WHERE tahun_rilis BETWEEN 2004 AND/Harus AND 2015
+
+
+-- NOT BETWEEN - Kebalikan BETWEEN
+
+-- SELECT judul FROM buku_buku WHERE tahun_rilis NOT BETWEEN 2000 AND 2004;
+
+-- CATATAN : UNTUK DATE TYPE HARUS DI CAST AGAR SERUPA SATU SAMA LAINNYA
+
+-- CAST() - Merubah Tipe Data
+
+-- SELECT CAST('2017-05-02' AS DATETIME);
+
+-- IN Mempermudah Menampilkan Data Yang Berkaitan Misalkan Tampilkan Buku Yang Pengarangnya Nama nya A ATAU B ATAU C Kita Bisa Pakai OR Tapi Kita Bisa Pakai IN Juga!
+
+-- SELECT judul,nama_belakang_pengarang FROM buku_buku WHERE nama_belakang_pengarang IN('Carver','Lahiri','Smith');
+
+-- SELECT column_name FROM table_name WHERE column_name IN(data,data,data optional);
+
+-- NOT IN - Kebalikan Dari OR Berarti AND
+
+-- % - MODULO 
+
+-- SELECT judul FROM buku_buku WHERE tahun_rilis >= 2000 AND tahun_rilis % 2 != 0;
+
+-- CASE STATEMENTS 
+
+-- SELECT column_name,CASE WHEN column_name >= 2000 WHEN optional WHEN optional THEN optional THEN 'Modern Lit'
+-- ELSE  '20th Century Lit'
+-- END AS Era
+-- FROM table_name;
+
+-- tiap when ada then
+
+-- Test
+
+-- TAMPILKAN DATA BUKU YANG TERBIT SEBELUM TAHUN 1980 
+
+-- SELECT judul,nama_depan_pengarang,tahun_rilis FROM buku_buku WHERE tahun_rilis>1980;
+
+-- TAMPILKAN DATA BUKU YANG PENGARANGNYA ADALAH EGGERS ATAU CHABON
+
+-- SELECT judul,nama_belakang_pengarang FROM buku_buku WHERE nama_belakang_pengarang IN('Eggers','Chabon');
+
+-- TAMPILKAN BUKU KARANGAN LAHIRI TERBIT DIATAS TAHUN 2000
+
+-- SELECT judul,nama_belakang_pengarang,tahun_rilis FROM buku_buku WHERE nama_belakang_pengarang='Lahiri' AND tahun_rilis >= 2000;
+
+-- TAMPILKAN BUKU YANG MEMILIKI JUMLAH HALAMAN ANTARA 100-200
+
+-- SELECT judul,jumlah_halaman FROM buku_buku WHERE jumlah_halaman BETWEEN 100 AND 200;
+
+-- TAMPILKAN BUKU YANG NAMA PENGARANGNYA DEPANNYA C ATAU S
+
+-- SELECT judul,nama_belakang_pengarang FROM buku_buku WHERE nama_belakang_pengarang LIKE 'c%' || nama_belakang_pengarang LIKE 's%';
+
+-- Tampilkan Data Jika judul ada stories nya menjadi short stories tipenya
+-- just kids dan a Heartbreaking work menjadi memoir
+-- sisanya novel
+
+-- SELECT judul,
+-- CASE WHEN judul LIKE '%stories%' THEN 'Short Stories' 
+-- WHEN judul='Just Kids' && judul LIKE '%a Heartbreaking work%' THEN 'Memoir' 
+-- ELSE 'Novel' END
+-- AS Tipe FROM buku_buku;
+
+-- TAMPILKAN DATA JUMLAH BUKU YANG DI TERBITKAN OLEH TIAP PENGARANG
+
+-- SELECT nama_belakang_pengarang,CASE 
+-- WHEN COUNT(nama_belakang_pengarang) = 1 THEN '1 Book'
+-- ELSE CONCAT(COUNT(nama_belakang_pengarang),' Books')END AS 'Jumlah Buku Yang Terbit'
+-- FROM buku_buku GROUP BY nama_belakang_pengarang;
+
+-- RELATIONSHIPS AND JOINS
+
+-- BASICS
+
+-- ONE TO ONE RELATIONSHIP NOT COMMON
+-- ONE TO MANY RELATIONSHIP COMMON CONTOH TIAP BUKU PUNYA BANYAK REVIEW TAPI REVIEW HANYA PUNYA 1 BUKU YANG DI REVIEW
+-- MANY TO MANY RELATIONSHIP CONTOH PENGARANG DENGAN BUKU BUKU BISA DIBUAT OLEH BEBERAPA PENGARANG DAN PENGARANG BISA MEMBUAT BANYAK BUKU
+
+-- 1:MANY MOST COMMON CONTOH CUSTOMERS DAN ORDERS 2 TABEL
+
+-- 1 PELANGGAN BISA MEMESAN BANYAK MAKANAN TAPI BANYAK MAKANAN ITU HANYA TERTUJU KE 1 PELANGGAN ITU
+
+-- INI SEMUANYA PERLU FOREIGN KEY YAITU REFRENSI DARI PRIMARY KEY YANG BERKAITAN DENGAN TABEL YANG KITA INGINKAN
+
+-- CREATE DATABASE toko_makanan;
+
+-- CREATE TABLE para_pelanggan (
+--     id_pelanggan INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+-- 	nama_depan VARCHAR(100) NOT NULL,
+--     nama_belakang VARCHAR(100) NOT NULL,
+--     email VARCHAR(100) NOT NULL
+-- );
+
+-- CREATE TABLE pesanan (
+-- 	id_pesanan INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     tanggal_pesanan DATE NOT NULL DEFAULT NOW(),
+--     total_pesanan DECIMAL(5,2) NOT NULL,
+--     id_pelanggan INT,
+--     FOREIGN KEY (id_pelanggan)REFERENCES para_pelanggan(id_pelanggan) ON DELETE CASCADE
+    
+-- )
+
+-- Foreign Key membatasi kita memasukkan data agar sesuai dengan yang di refrensikan
+
+-- FOREIGN KEY (column_name)REFERENCES table_name_that_want_to_refrences(column_name_that_want_to_refrences)
+
+-- JOIN - Menggabungkan 2 Tabel Menjadi Satu Untuk Ditampilkan Dan Tidak Berubah Untuk Strukturnya
+
+-- SELECT * para_pelanggan,pesanan - CROSS JOIN - INI SALAH
+
+-- IMPLICIT INNER JOIN - USELESS 
+
+-- SELECT * para_pelanggan,pesanan WHERE para_pelanggan.id_pelanggan = pesanan.id_pesanan;
+
+-- SELECT * table_name,table_name2 WHERE table_name.column_name = table_name2.column_name2; - CROSS JOIN - INI BENAR
+
+-- EXPLICIT INNER JOIN - CARA LEBIH BAIK 
+
+-- SELECT * FROM para_pelanggan JOIN pesanan ON para_pelanggan.id_pelanggan = pesanan.id_pelanggan;
+
+-- SELECT column_name FROM table_name JOIN table_name2 ON table_name.column_name = table_name2.column_name2;
+
+-- SELECT nama_depan,nama_belakang,tanggal_pesanan,total_pesanan FROM para_pelanggan JOIN pesanan ON para_pelanggan.id_pelanggan = pesanan.id_pelanggan;
+
+-- -- ARBITRARY JOIN - JANGAN PAKAI
+
+-- Mengetahui Pelanggan Yang Memesan Paling Banyak
+
+-- SELECT nama_depan,nama_belakang,SUM(total_pesanan) AS jumlahPesanan FROM para_pelanggan JOIN pesanan ON para_pelanggan.id_pelanggan = pesanan.id_pelanggan GROUP BY pesanan.id_pelanggan ORDER BY jumlahPesanan DESC; -- EXPLICIT INNER JOIN
+
+-- LEFT JOIN 
+
+-- SELECT nama_depan,nama_belakang,total_pesanan FROM para_pelanggan LEFT JOIN pesanan ON para_pelanggan.id_pelanggan = pesanan.id_pelanggan;
+
+-- Mengambil Bagian Kiri Yaitu column_name pertama disini para_pelanggan tidak peduli benar atau tidaknya sesuai dengan ON nya;
+
+-- HASIL DIATAS ADALAH WALAUPUN ADA PELANGGAN YANG BELUM MEMESAN TETAP DATA DITAMPILKAN DENGAN NULL KARENA TIDAK PEDULI BENAR ONNYA MAKA YANG BAGIAN KIRI ATAU table_name 1 AKAN TAMPIL.
+
+-- JIKA DATA NULL KITA BISA MENGGUNAKAN IFNULL(SUM(total_pesanan),0/value yang ingin dimasukkan);
+
+-- RIGHT JOIN - KEBALIKAN LEFT JOIN
+
+-- ON DELETE CASCADE -- Menghapus data yang mengandung foreign key ketika data yang di refrensikan hilang.Contoh ketika si a memesan 2 makanan maka jika a hilang 2 pesanan itu juga hilang.sebelumnya tidak bisa kita hapus pesanan karena si a masih ada sekarang bisa.
+
+
+
+-- Membuat 2 tabel paramurid dan pararapot
+
+-- para murid column = id,first_name
+-- pararapot = title,grade,murid.id
+
+-- CREATE DATABASE dalam_kelas;
+-- USE dalam_kelas;
+
+-- CREATE TABLE para_murid (
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--   nama_depan VARCHAR(30) NOT NULL
+-- )
+
+-- CREATE TABLE rapor (
+--   judul VARCHAR(20) NOT NULL,
+--   nilai INT NOT NULL DEFAULT 0,
+--   id INT,
+--   FOREIGN KEY (id) REFERENCES para_murid(id) ON DELETE CASCADE
+-- )
+
+-- INSERT INTO para_murid (nama_depan) VALUES ('Caleb'),('Samantha'),('Raj'),('Carlos'),('Lisa');
+
+-- INSERT INTO rapor (id,judul,nilai) VALUES (1,'My First Book Report',60),(1,'My Second Book Report',75),(2,'Russian Lit Through The Ages',94),(2,'De Montaigne And The Art Of The Essay',98),(4,'Borges And Magical Realism',89);
+
+-- Tampilkan Data Dengan Nama Murid judul rapor dan nilainya Dan Nilai Paling Besar Di atas
+
+-- SELECT nama_depan,judul,nilai FROM para_murid JOIN rapor ON para_murid.id = rapor.id ORDER BY nilai DESC;
+
+-- Tampilkan Data Semua Murid judul rapor nilai tidak peduli ada nilai atau tidak
+
+-- SELECT nama_depan,judul,nilai FROM para_murid LEFT JOIN rapor ON para_murid.id = rapor.id;
+
+-- Tampilkan Data Murid Diatas Ubah Null Menjadi Missing Atau 0
+
+-- SELECT nama_depan,IFNULL(judul,'HILANG'),IFNULL(nilai,0) FROM para_murid LEFT JOIN rapor ON para_murid.id = rapor.id;
+
+-- Membuat Rata-rata nilai tiap murid dan paling atas nilai paling besar
+
+-- SELECT nama_depan,AVG(IFNULL(nilai,0)) AS 'Rata-rata' FROM para_murid LEFT JOIN rapor ON para_murid.id = rapor.id GROUP BY para_murid.id ORDER BY nilai DESC;
+
+-- Kemudian Menambah Status Lulus Tidaknya Dengan Nilai Dibawah 50 Gagal
+
+-- SELECT nama_depan,AVG(IFNULL(nilai,0)) AS 'Rata-rata' ,CASE 
+-- WHEN nilai IS NULL THEN 'GAGAL'
+-- WHEN nilai > 75 THEN 'LULUS' ELSE 'GAGAL' END AS Kelulusan FROM para_murid 
+-- LEFT JOIN rapor ON para_murid.id = rapor.id 
+-- GROUP BY para_murid.id 
+-- ORDER BY nilai DESC;
+
+MANY MANY RELATIONSHIP - RELATIONSHIP YANG UMUM DIPAKE LEBIH RUMIT DARI ONE TO MANY
+
+CONTOH : BUKU - PENGARANG - Buku punya banyak pengarang,Dan tiap pengarang punya beberapa buku terbitan
+MURID - KELAS 
+POST - TAGS 
+
+CONTOH YANG AKAN DI BUAT APLIKASI MEREVIEW ACARA TV
+
+KITA SEBAGAI REVIEWER MEMBUAT REVIEW DAN RATE ACARA TV DAN ACARA TV ITU MEMILIKI BANYAK REVIEW OLEH REVIEWER LAIN JUGA
+
+ADA 2 TABEL TABEL ACARA TV DAN TABEL PARA PENILAI.PARA PENILAI MEMBERIKAN NILAI DI ACARA TV ITU YANG BISA KITA BUAT TABEL TERSENDIRI.TABEL NILAI ATAU REVIEW TERDIRI DARI ACARA TV ITU SENDIRI,REVIEWER,DAN NILAI YANG DIBERIKAN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
