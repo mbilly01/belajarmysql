@@ -948,17 +948,257 @@
 -- GROUP BY para_murid.id 
 -- ORDER BY nilai DESC;
 
-MANY MANY RELATIONSHIP - RELATIONSHIP YANG UMUM DIPAKE LEBIH RUMIT DARI ONE TO MANY
+-- MANY MANY RELATIONSHIP - RELATIONSHIP YANG UMUM DIPAKE LEBIH RUMIT DARI ONE TO MANY
 
-CONTOH : BUKU - PENGARANG - Buku punya banyak pengarang,Dan tiap pengarang punya beberapa buku terbitan
-MURID - KELAS 
-POST - TAGS 
+-- CONTOH : BUKU - PENGARANG - Buku punya banyak pengarang,Dan tiap pengarang punya beberapa buku terbitan
+-- MURID - KELAS 
+-- POST - TAGS 
 
-CONTOH YANG AKAN DI BUAT APLIKASI MEREVIEW ACARA TV
+-- CONTOH YANG AKAN DI BUAT APLIKASI MEREVIEW ACARA TV
 
-KITA SEBAGAI REVIEWER MEMBUAT REVIEW DAN RATE ACARA TV DAN ACARA TV ITU MEMILIKI BANYAK REVIEW OLEH REVIEWER LAIN JUGA
+-- KITA SEBAGAI REVIEWER MEMBUAT REVIEW DAN RATE ACARA TV DAN ACARA TV ITU MEMILIKI BANYAK REVIEW OLEH REVIEWER LAIN JUGA
 
-ADA 2 TABEL TABEL ACARA TV DAN TABEL PARA PENILAI.PARA PENILAI MEMBERIKAN NILAI DI ACARA TV ITU YANG BISA KITA BUAT TABEL TERSENDIRI.TABEL NILAI ATAU REVIEW TERDIRI DARI ACARA TV ITU SENDIRI,REVIEWER,DAN NILAI YANG DIBERIKAN
+-- ADA 2 TABEL TABEL ACARA TV DAN TABEL PARA PENILAI.PARA PENILAI MEMBERIKAN NILAI DI ACARA TV ITU YANG BISA KITA BUAT TABEL TERSENDIRI.TABEL NILAI ATAU REVIEW TERDIRI DARI ACARA TV ITU SENDIRI,REVIEWER,DAN NILAI YANG DIBERIKAN
+
+-- UNION JOIN
+
+-- Reviewers
+-- id
+-- nama_depan
+-- nama_belakang
+
+-- 1 blue steele
+-- 2 wyatt earp
+
+-- Reviews
+-- id
+-- rating
+-- series_id = series.id
+-- reviwer_id = reviewers.id
+
+-- 1 8.9 1 2
+-- 2 9.5 2 2
+
+
+
+-- Series
+-- id
+-- title
+-- released_year
+-- genre
+
+-- 1 archer 2009 animation
+-- 2 fargo 2014 drama
+
+-- CREATE DATABASE tv_show_app;
+-- USE tv_show_app;
+
+-- CREATE TABLE reviewers (
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--   nama_depan VARCHAR(100) NOT NULL,
+--   nama_belakang VARCHAR(100) NOT NULL
+-- );
+
+-- CREATE TABLE series (
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--   judul VARCHAR(100) NOT NULL,
+--   tahun_rilis YEAR(4) NOT NULL,
+--   genre VARCHAR(100) NOT NULL
+-- );
+
+-- CREATE TABLE reviews (
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--   rating DECIMAL(2,1) NOT NULL,
+--   id_series INT,
+--   id_reviewer INT,
+--   FOREIGN KEY (id_series) REFERENCES series(id) ON DELETE CASCADE,
+--   FOREIGN KEY (id_reviewer) REFERENCES reviewers(id) ON DELETE CASCADE
+-- );
+
+-- INSERT INTO series (judul,tahun_rilis,genre) VALUES
+-- ('Archer',2009,'Animation'),
+-- ('Arrested Development',2003,'Comedy'),
+-- ("Bob's Burgers",2011,'Animation'),
+-- ('Bojack Horseman',2014,'Animation'),
+-- ('Breaking Bad',2008,'Drama'),
+-- ('Curb Your Enthusiasm',2000,'Comedy'),
+-- ('Fargo',2014,'Drama'),
+-- ('Freaks And Geeks',1999,'Comedy'),
+-- ('General Hospital',1963,'Drama'),
+-- ('Halt And Catch Fire',2014,'Drama'),
+-- ('Malcolm In The Middle',2000,'Comedy'),
+-- ('Pushing Daisies',2007,'Comedy'),
+-- ('Seinfeld',1989,'Comedy'),
+-- ('Stranger Things',2016,'Drama');
+
+-- INSERT INTO reviewers (nama_depan,nama_belakang) VALUES
+-- ('Thomas','Stoneman'),
+-- ('Wyatt','Skaggs'),
+-- ('Kimbra','Masters'),
+-- ('Domingo','Cortes'),
+-- ('Colt','Steele'),
+-- ('Pinkie','Petit'),
+-- ('Marlon','Crafford');
+
+-- INSERT INTO reviews (id_series,id_reviewer,rating) VALUES
+-- (1,1,8.0),(1,2,7.5),(1,3,8.5),(1,4,7.7),(1,5,8.9),
+-- (2,1,8.1),(2,4,6.0),(2,3,8.0),(2,6,7.1),(2,5,8.0),
+-- (3,1,7.0),(3,6,7.5),(3,4,8.0),(3,3,7.1),(3,5,8.0),
+-- (4,1,7.5),(4,3,7.8),(4,4,8.3),(4,2,7.6),(4,5,8.5),
+-- (5,1,9.5),(5,3,9.0),(5,4,9.1),(5,2,9.3),(5,5,9.9),
+-- (6,2,6.5),(6,3,7.8),(6,4,8.8),(6,2,8.4),(6,5,9.1),
+-- (7,2,9.1),(7,5,9.7),
+-- (8,4,8.5),(8,2,7.8),(8,6,8.8),(8,5,9.3),
+-- (9,2,5.5),(9,3,6.8),(9,4,5.8),(9,6,4.3),(9,5,4.5),
+-- (10,5,9.9),
+-- (13,3,8.0),(13,4,7.2),
+-- (14,2,8.5),(14,3,8.9),(14,4,8.9);
+
+-- Challenge 1
+
+-- SELECT judul,rating FROM series JOIN reviews ON reviews.id_series = series.id LIMIT 15;
+
+-- Challenge 2
+
+-- Menampilkan data series yang ada ratingnya beserta rating rata2nya
+
+-- SELECT judul,AVG(rating) AS 'Rata-rata Rating' FROM series JOIN reviews ON series.id = reviews.id_series GROUP BY series.id ORDER BY rating;
+
+-- Challenge 3
+
+-- Menampilkan data reviewers beserta rating yang diberikan
+
+-- SELECT nama_depan,nama_belakang,rating FROM reviewers JOIN reviews ON reviewers.id = reviews.id_reviewer;
+
+-- Challenge 4
+
+-- Menampilkan seri yang belum di review
+
+-- SELECT judul AS 'seri belum di review' FROM series LEFT JOIN reviews ON reviews.id_series = series.id WHERE rating IS NULL;
+
+-- Challenge 5
+
+-- Menampilkan Rating rata2 Tiap Genre
+
+-- SELECT genre,ROUND(AVG(rating),2) AS Ratarata FROM series JOIN reviews ON series.id = reviews.id_series GROUP BY genre;
+
+-- ROUND(data,berapa digit)
+
+-- Challenge 6 
+
+-- Menampilkan data reviewers secara penuh dan menentukan active tidaknya
+
+-- SELECT nama_depan,
+-- nama_belakang,
+-- COUNT(reviews.id_reviewer),
+-- IFNULL(ROUND(MIN(rating),2),0),
+-- IFNULL(ROUND(MAX(rating),2),0),
+-- IFNULL(ROUND(AVG(rating),2),0),
+-- CASE WHEN COUNT(reviews.id_reviewer) = 0 THEN 'INACTIVE' 
+-- ELSE 'ACTIVE' END AS Status 
+-- FROM reviewers 
+-- LEFT JOIN reviews ON reviewers.id = reviews.id_reviewer 
+-- GROUP BY reviewers.id ORDER BY Status ;
+
+-- Challenge 7 
+
+-- Menampilkan Judul Rating Reviewers
+
+-- SELECT judul,rating,CONCAT(nama_depan,'',nama_belakang) AS reviewer  FROM reviewers JOIN reviews ON reviewers.id = reviews.id_reviewer JOIN series ON series.id = reviews.id_series ORDER BY judul;
+
+-- INSTAGRAM CLONE MOCK DATABASE
+
+users table id,username,created_at
+photos table id,image_url,user_id,created_at
+likes table user_id,photo_id,created_at
+hashtags table 
+comments table id,comment_text,user_id,photo_id,created_at
+follows table follower_id,followee_id,created_at
+
+
+follower pengikut yang mengikuti followee
+
+CREATE DATABASE instagram_mock;
+USE instagram_mock;
+
+CREATE TABLE users (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE photos (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  image_url VARCHAR (255) NOT NULL,
+  user_id INT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE comments (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  comment_text VARCHAR(255) NOT NULL,
+  user_id INT NOT NULL,
+  photo_id INT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  FOREIGN KEY (user_id) REFERENCES users(id) 
+  FOREIGN KEY (photo_id) REFERENCES photos(id) 
+);
+
+CREATE TABLE likes (
+  user_id INT NOT NULL,
+  photo_id INT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  FOREIGN KEY (user_id) REFERENCES users(id) 
+  FOREIGN KEY (photo_id) REFERENCES photos(id),
+  PRIMARY KEY (user_id,photo_id) -- memberikan aturan agar like hanya bisa dilakukan sekali per user
+);
+
+CREATE TABLE follows (
+  follower_id INT NOT NULL
+  followee_id INT NOT NULL
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  FOREIGN KEY (follower_id) REFERENCES users(id),
+  FOREIGN KEY (followee_id) REFERENCES users(id),
+  PRIMARY KEY (follower_id,followee_id) --memberikan aturan agar kita hanya bisa follow sekali
+);
+
+CREATE TABLE tags (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tag_name VARCHAR(255) NOT NULL UNIQUE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE photo_tags (
+  photo_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  FOREIGN KEY (photo_id) REFERENCES photos(id),
+  FOREIGN KEY (tag_id) REFERENCES tags(id),
+  PRIMARY KEYY (photo_id,tag_id)
+);
+
+DATA Nanti Kalau Ada Quota Karena Perlu Download
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
